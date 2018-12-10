@@ -6,11 +6,12 @@ export class TreatyMenu extends Component {
     constructor(){
         super();
         this.state={
-            filter:'',
+            inputValue:'',
             status:null
         };
         this.handleClickAsc=this.handleClickAsc.bind(this);
         this.handleClickDesc=this.handleClickDesc.bind(this);
+        this.handleFilter=this.handleFilter.bind(this);
         this.onStatusChange=this.onStatusChange.bind(this);
       
     }
@@ -20,12 +21,21 @@ export class TreatyMenu extends Component {
     handleClickDesc(){
         this.props.desc(this.props.field);
     }
+    handleFilter(e){
+        
+        this.setState({
+            inputValue: e.target.value
+          });
+          console.log(this.state.inputValue);
+          this.props.filter(this.props.field,this.state.inputValue);
+    }
     onStatusChange=(e)=>{
         const statusChange=e.value;
         this.setState({
-            status: statusChange
-            //status:e
+            status: statusChange,
+            inputValue:statusChange
         });
+        this.props.filter(this.props.field,this.state.inputValue);
     }
   
    
@@ -58,7 +68,7 @@ export class TreatyMenu extends Component {
     </div>
 
     <h6>Filter</h6>
-    {this.props.field==='status'? <Dropdown className="b4" value={this.state.status} options={statusArr} onChange={this.onStatusChange} placeholder="Select"/>: <input id="search" className="in" onInput={(e) => this.setState({filter: e.target.value})} placeholder="Filter"  size="10" />}
+    {this.props.field==='status'? <Dropdown className="b4" value={this.state.status} options={statusArr} onChange={this.onStatusChange} placeholder="Select"/>: <input id="search" className="in" value={this.state.inputValue} onInput={(e) => this.setState({filter: e.target.value})} onChange={this.handleFilter} placeholder="Filter"  size="10" />}
   
 
    
