@@ -12,11 +12,19 @@ export default class TreatyTable extends React.Component{
         this.state = {
             data:[],
             sort: 0,
-            field:""
+            field:"",
+            filters:{
+                field:{
+                    value:""
+                }
+                   
+               
+            }
         };
         this.tableService= new TableService();
         this.sortAsc=this.sortAsc.bind(this);
         this.sortDesc=this.sortDesc.bind(this);
+        this.input=this.input.bind(this);
     }
 
  
@@ -39,19 +47,30 @@ export default class TreatyTable extends React.Component{
             sort: -1
           });
     }
+
+    input(field,e){
+        this.setState({
+            filters:{
+               
+               [field]:{
+                   value:e
+               }
+            }
+        },()=>{console.log(this.state.filters);});
+    }
    
     render(){
         
         const columns = [
-            {field: 'ledger', header: (<Header field="ledger" header='Ledger' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'ledgerName', header: (<Header field="ledgerName"  header='Ledger Name' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'uwUnit', header: (<Header  field="uwUnit" header='UW Unit' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'credentNo', header: (<Header field="credentNo" header='Credent No' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'credentName', header: (<Header field="credentName"  header='Credent Name' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'treatyNo', header: (<Header field="treatyNo" header='Treaty No' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'treatyName', header: (<Header field="treatyName"  header='Treaty Name' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'lastUWY', header: (<Header field="lastUWY" header='Last UWY' asc={this.sortAsc} desc={this.sortDesc}/>)},
-            {field: 'status', header: (<Header field='status' header='Status' asc={this.sortAsc} desc={this.sortDesc}/>)}
+            {field: 'ledger', header: (<Header field="ledger" header='Ledger' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'ledgerName', header: (<Header field="ledgerName"  header='Ledger Name' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'uwUnit', header: (<Header  field="uwUnit" header='UW Unit' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'credentNo', header: (<Header field="credentNo" header='Credent No' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'credentName', header: (<Header field="credentName"  header='Credent Name' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'treatyNo', header: (<Header field="treatyNo" header='Treaty No' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'treatyName', header: (<Header field="treatyName"  header='Treaty Name' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'lastUWY', header: (<Header field="lastUWY" header='Last UWY' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)},
+            {field: 'status', header: (<Header field='status' header='Status' asc={this.sortAsc} desc={this.sortDesc} filter={this.input}/>)}
         ];
         
         const dynamicColumns = columns.map((col) => {
@@ -64,13 +83,13 @@ export default class TreatyTable extends React.Component{
         });
         let filtered = columns.filter(item => {
             return (
-              item.field == this.props.filter?item.field:"No data found"
+              item.field == this.state.inputVal?item.field:"No data found"
             );
           });
         return (
             <div>
                
-                <DataTable sortOrder={this.state.sort} onFilter={()=>{this.setState({data:filtered})}} onSort={(e)=>{this.setState({sort:e.sortOrder})}} sortField={this.state.field} ref={(el) => this.dt = el} value={this.state.datas} paginator={true} rows={5}>
+                <DataTable sortOrder={this.state.sort} filters={this.state.filters} onFilter={(e)=>{this.setState({filters:e.filters})}} onSort={(e)=>{this.setState({sort:e.sortOrder})}} sortField={this.state.field} ref={(el) => this.dt = el} value={this.state.datas} paginator={true} rows={5}>
                 {dynamicColumns}
                    
                  
