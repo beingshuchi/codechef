@@ -18,7 +18,7 @@ export class Header extends React.Component{
         */ }
         <Button id="menu" type="button" label={this.props.header} onClick={(e) => this.op.toggle(e)} iconPos="right" icon="fa fa-caret-down" />
         <OverlayPanel ref={(el) => this.op = el} appendTo={document.body}>
-       <TreatyMenu field={this.props.field} asc={this.props.asc} desc={this.props.desc}/>
+       <TreatyMenu field={this.props.field} asc={this.props.asc} desc={this.props.desc} filter={this.props.filter}/>
       </OverlayPanel>
             </div>
         );
